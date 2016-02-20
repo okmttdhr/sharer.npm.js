@@ -29,7 +29,7 @@ class Sample extends React.Component {
         className='sharer button'
         data-sharer='twitter'
         data-title='Checkout Sharer.js!'
-        data-url={`https://ellisonleao.github.io/sharer.js/`}>
+        data-url='https://ellisonleao.github.io/sharer.js/'>
         Share on Twitter
       </button>
     )
