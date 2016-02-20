@@ -1,6 +1,6 @@
 {
   "name": "sharer.npm.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Create custom social share DOM elements. No dependencies.",
   "main": "sharer.js",
   "repository": {
@@ -40,12 +40,10 @@
     "url": "https://github.com/okmttdhr/sharer.npm.js/issues"
   },
   "scripts": {
-    "test": "eslint sharer.js",
-    "compress": "uglifyjs sharer.js --compress --mangle --comments > sharer.min.js"
+    "test": "eslint sharer.js"
   },
-  "homepage": "https://ellisonleao.github.io/sharer.js/",
+  "homepage": "https://github.com/okmttdhr/sharer.npm.js/issues",
   "devDependencies": {
-    "uglifyjs": "^2.4.10",
     "eslint": "^1.10.3"
   }
 }
