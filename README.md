@@ -24,9 +24,7 @@ class Sample extends React.Component {
 
   render() {
     return (
-      <div onClick={::this.handleClick}>
-        <button className='sharer button' data-sharer='twitter' data-title='Checkout Sharer.js!' data-url={`https://ellisonleao.github.io/sharer.js/`}>Share on Twitter</button>
-      </div>
+      <button onClick={::this.handleClick} className='sharer button' data-sharer='twitter' data-title='Checkout Sharer.js!' data-url={`https://ellisonleao.github.io/sharer.js/`}>Share on Twitter</button>
     )
   }
 }
