@@ -1,6 +1,6 @@
 {
   "name": "sharer.npm.js",
-  "version": "0.2.12",
+  "version": "0.0.1",
   "description": "Create custom social share DOM elements. No dependencies.",
   "main": "sharer.js",
   "repository": {
@@ -34,7 +34,7 @@
     "myspace",
     "baidu"
   ],
-  "author": "okp",
+  "author": "okp (http://okmttdhr.github.io/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/okmttdhr/sharer.npm.js/issues"
