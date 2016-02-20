@@ -8,8 +8,8 @@ A good development cycle can be described as the following:
 - Clone repo and install dev requirements
 
 ```
-git clone git@github.com:ellisonleao:sharer.js
-cd sharer.js
+git clone https://github.com/okmttdhr/sharer.npm.js.git
+cd sharer.npm.js
 npm install
 ```
 

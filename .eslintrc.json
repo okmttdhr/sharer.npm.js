@@ -1,4 +1,7 @@
 {
+    "globals" : {
+      "module": true
+    },
     "rules": {
         "indent": [
             2,

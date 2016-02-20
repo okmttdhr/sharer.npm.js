@@ -1,11 +1,11 @@
 {
-  "name": "sharer.js",
+  "name": "sharer.npm.js",
   "version": "0.2.12",
   "description": "Create custom social share DOM elements. No dependencies.",
   "main": "sharer.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ellisonleao/sharer.js.git"
+    "url": "git+https://github.com/okmttdhr/sharer.npm.js.git"
   },
   "keywords": [
     "social",
@@ -34,10 +34,10 @@
     "myspace",
     "baidu"
   ],
-  "author": "Ellison Leão <ellisonleao@gmail.com>",
+  "author": "okp",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ellisonleao/sharer.js/issues"
+    "url": "https://github.com/okmttdhr/sharer.npm.js/issues"
   },
   "scripts": {
     "test": "eslint sharer.js",
