@@ -217,6 +217,9 @@ Sharer.prototype = {
                         it: this.getValue('title'),
                         iu: this.getValue('url')
                     }
+                },
+                hatenabookmark: {
+                    shareUrl: 'http://cang.baidu.com/do/add' + this.getValue('url'),
                 }
             },
             s = sharers[sharer];
