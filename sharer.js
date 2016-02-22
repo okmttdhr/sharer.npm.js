@@ -10,283 +10,258 @@
  */
 
 /**
- * @constructor
- */
+* @constructor
+*/
 var Sharer = function(elem) {
-    this.elem = elem;
+   this.elem = elem;
 };
 
 Sharer.prototype = {
-    /**
-     *  @function getValue
-     *  @description Helper to get the attribute of a DOM element
-     *  @param {String} attr DOM element attribute
-     *  @returns {String|Empty} returns the attr value or empty string
-     */
-    getValue: function(attr) {
-        var val = this.elem.getAttribute('data-' + attr);
-        return (val === undefined || val === null) ? '' : val;
-    },
+   /**
+    *  @function getValue
+    *  @description Helper to get the attribute of a DOM element
+    *  @param {String} attr DOM element attribute
+    *  @returns {String|Empty} returns the attr value or empty string
+    */
+   getValue: function(attr) {
+       var val = this.elem.getAttribute('data-' + attr);
+       return (val === undefined || val === null) ? false : val;
+   },
 
-    /**
-     * @event share
-     * @description Main share event. Will pop a window or redirect to a link
-     * based on the data-sharer attribute.
-     */
-    share: function() {
-        var sharer = this.getValue('sharer').toLowerCase(),
-            that = this,
-            shareUrl,
-            params,
-            sharers = {
-                facebook: function () {
-                    shareUrl = 'https://www.facebook.com/sharer/sharer.php';
-                    params = {u: that.getValue('url')};
-                    that.urlSharer(shareUrl, params);
-                },
-                googleplus: function () {
-                    shareUrl = 'https://plus.google.com/share';
-                    params = {url: that.getValue('url')};
-                    that.urlSharer(shareUrl, params);
-                },
-                linkedin: function () {
-                    shareUrl = 'https://www.linkedin.com/shareArticle';
-                    params = {
-                        url: that.getValue('url'),
-                        mini: true
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                twitter: function () {
-                    var via = that.getValue('via');
+   /**
+    * @event share
+    * @description Main share event. Will pop a window or redirect to a link
+    * based on the data-sharer attribute.
+    */
+   share: function() {
+       var sharer = this.getValue('sharer').toLowerCase(),
+           sharers = {
+               facebook: {
+                   shareUrl: 'https://www.facebook.com/sharer/sharer.php',
+                   params: {u: this.getValue('url')}
+               },
+               googleplus: {
+                   shareUrl: 'https://plus.google.com/share',
+                   params: {url: this.getValue('url')}
+               },
+               linkedin: {
+                   shareUrl: 'https://www.linkedin.com/shareArticle',
+                   params: {
+                       url: this.getValue('url'),
+                       mini: true
+                   }
+               },
+               twitter: {
+                   shareUrl: 'https://twitter.com/intent/tweet/',
+                   params: {
+                       text: this.getValue('title'),
+                       url: this.getValue('url'),
+                       hashtags: this.getValue('hashtags'),
+                       via: this.getValue('via')
+                   }
+               },
+               email: {
+                   shareUrl: 'mailto:' + this.getValue('to'),
+                   params: {
+                       subject: this.getValue('subject'),
+                       body: this.getValue('title') + '\n' + this.getValue('url')
+                   },
+                   isLink: true
+               },
+               whatsapp: {
+                   shareUrl: 'whatsapp://send',
+                   params: {
+                       text: this.getValue('title') + ' ' + this.getValue('url')
+                   },
+                   isLink: true
+               },
+               telegram: {
+                   shareUrl: 'tg://msg_url',
+                   params: {
+                       text: this.getValue('title') + ' ' + this.getValue('url')
+                   },
+                   isLink: true
+               },
+               viber: {
+                   shareUrl: 'viber://forward',
+                   params: {
+                       text: this.getValue('title') + ' ' + this.getValue('url')
+                   },
+                   isLink: true
+               },
+               line: {
+                   shareUrl: 'http://line.me/R/msg/text/?' + encodeURIComponent(this.getValue('title') + ' ' + this.getValue('url')),
+                   isLink: true
+               },
+               pinterest: {
+                   shareUrl: 'https://www.pinterest.com/pin/create/button/',
+                   params: {url: this.getValue('url')}
+               },
+               tumblr: {
+                   shareUrl: 'http://tumblr.com/widgets/share/tool',
+                   params: {
+                       canonicalUrl: this.getValue('url'),
+                       content: this.getValue('url'),
+                       posttype: 'link',
+                       title: this.getValue('title'),
+                       caption: this.getValue('caption'),
+                       tags: this.getValue('tags')
+                   }
+               },
+               hackernews: {
+                   shareUrl: 'https://news.ycombinator.com/submitlink',
+                   params: {
+                       u: this.getValue('url'),
+                       t: this.getValue('title')
+                   }
+               },
+               reddit: {
+                   shareUrl: 'https://www.reddit.com/submit',
+                   params: {'url': this.getValue('url')}
+               },
+               vk: {
+                   shareUrl: 'http://vk.com/share.php',
+                   params: {
+                       url: this.getValue('url'),
+                       title: this.getValue('title'),
+                       description: this.getValue('caption'),
+                       image: this.getValue('image')
+                   }
+               },
+               xing: {
+                   shareUrl: 'https://www.xing.com/app/user',
+                   params: {
+                       'op': 'share',
+                       'url': this.getValue('url'),
+                       'title': this.getValue('title')
+                   }
+               },
+               buffer: {
+                   shareUrl: 'https://buffer.com/add',
+                   params: {
+                       url: this.getValue('url'),
+                       title: this.getValue('title'),
+                       via: this.getValue('via'),
+                       picture: this.getValue('picture')
+                   }
+               },
+               instapaper: {
+                   shareUrl: 'http://www.instapaper.com/edit',
+                   params: {
+                       url: this.getValue('url'),
+                       title: this.getValue('title'),
+                       description: this.getValue('description')
+                   }
+               },
+               pocket: {
+                   shareUrl: 'https://getpocket.com/save',
+                   params: {
+                       url: this.getValue('url')
+                   }
+               },
+               digg: {
+                   shareUrl: 'http://www.digg.com/submit',
+                   params: {
+                       url: this.getValue('url')
+                   }
+               },
+               stumbleupon: {
+                   shareUrl: 'http://www.stumbleupon.com/submit',
+                   params: {
+                       url: this.getValue('url'),
+                       title: this.getValue('title')
+                   }
+               },
+               flipboard: {
+                   shareUrl: 'https://share.flipboard.com/bookmarklet/popout',
+                   params: {
+                       v: 2,
+                       title: this.getValue('title'),
+                       url: this.getValue('url'),
+                       t: Date.now()
+                   }
+               },
+               weibo: {
+                   shareUrl: 'http://service.weibo.com/share/share.php',
+                   params: {
+                       url: this.getValue('url'),
+                       title: this.getValue('title'),
+                       language: 'zh_cn'
+                   }
+               },
+               renren: {
+                   shareUrl: 'http://share.renren.com/share/buttonshare',
+                   params: {
+                       link: this.getValue('url')
+                   }
+               },
+               myspace: {
+                   shareUrl: 'https://myspace.com/post',
+                   params: {
+                       u: this.getValue('url'),
+                       t: this.getValue('title'),
+                       c: this.getValue('description')
+                   }
+               },
+               blogger: {
+                   shareUrl: 'https://www.blogger.com/blog-this.g',
+                   params: {
+                       u: this.getValue('url'),
+                       n: this.getValue('title'),
+                       t: this.getValue('description')
+                   }
+               },
+               baidu: {
+                   shareUrl: 'http://cang.baidu.com/do/add',
+                   params: {
+                       it: this.getValue('title'),
+                       iu: this.getValue('url')
+                   }
+               }
+           },
+           s = sharers[sharer];
 
-                    shareUrl = 'https://twitter.com/intent/tweet/';
-                    params = {
-                        text: that.getValue('title'),
-                        url: that.getValue('url'),
-                        hashtags: that.getValue('hashtags')
-                    };
+       // custom popups sizes
+       if (s) {
+           s.width = this.getValue('width');
+           s.height = this.getValue('height');
+       }
+       return s !== undefined ? this.urlSharer(s) : false;
+   },
+   /**
+    * @event urlSharer
+    * @param {Object} sharer
+    */
+   urlSharer: function(sharer) {
+       var p = sharer.params || {},
+           keys = Object.keys(p),
+           i,
+           str = keys.length > 0 ? '?' : '';
+       for (i = 0; i < keys.length; i++) {
+           if (str !== '?') {
+               str += '&';
+           }
+           if (p[keys[i]]) {
+               str += keys[i] + '=' + encodeURIComponent(p[keys[i]]);
+           }
+       }
+       sharer.shareUrl += str;
 
-                    if (via) {
-                        params.via = via;
-                    }
-                    that.urlSharer(shareUrl, params);
-                },
-                email: function () {
-                    var subject = that.getValue('subject');
-                    shareUrl = 'mailto:' + that.getValue('to');
-                    params = {
-                        subject: subject,
-                        body: subject + '\n'+ that.getValue('title') + '\n' + that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params, true);
-                },
-                whatsapp: function () {
-                    shareUrl = 'whatsapp://send';
-                    params = {
-                        text: that.getValue('title') + ' ' + that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params, true);
-                },
-                telegram: function () {
-                    shareUrl = 'tg://msg_url';
-                    params = {
-                        text: that.getValue('title') + ' ' + that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params, true);
-                },
-                viber: function () {
-                    shareUrl = 'viber://forward';
-                    params = {text: that.getValue('title') + ' ' + that.getValue('url')};
-                    that.urlSharer(shareUrl, params, true);
-                },
-                line: function () {
-                    var text = that.getValue('title') + ' ' + that.getValue('url');
-                    shareUrl = 'http://line.me/R/msg/text/?' + encodeURIComponent(text);
-                    that.urlSharer(shareUrl, {}, true);
-                },
-                pinterest: function () {
-                    shareUrl = 'https://www.pinterest.com/pin/create/button/';
-                    params = {url: that.getValue('url')};
-                    that.urlSharer(shareUrl, params);
-                },
-                tumblr: function () {
-                    shareUrl = 'http://tumblr.com/widgets/share/tool';
-                    params = {
-                        canonicalUrl: that.getValue('url'),
-                        content: that.getValue('url'),
-                        posttype: 'link',
-                        title: that.getValue('title'),
-                        caption: that.getValue('caption'),
-                        tags: that.getValue('tags')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                hackernews: function () {
-                    shareUrl = 'https://news.ycombinator.com/submitlink';
-                    params = {
-                        u: that.getValue('url'),
-                        t: that.getValue('title')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                reddit: function () {
-                    shareUrl = 'https://www.reddit.com/submit';
-                    params = {'url': that.getValue('url')};
-                    that.urlSharer(shareUrl, params);
-                },
-                vk: function () {
-                    shareUrl = 'http://vk.com/share.php';
-                    params = {
-                        url: that.getValue('url'),
-                        title: that.getValue('title'),
-                        description: that.getValue('caption'),
-                        image: that.getValue('picture')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                xing: function() {
-                    shareUrl = 'https://www.xing.com/app/user';
-                    params = {
-                        'op': 'share',
-                        'url': that.getValue('url'),
-                        'title': that.getValue('title')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                buffer: function() {
-                    shareUrl = 'https://buffer.com/add';
-                    params = {
-                        url: that.getValue('url'),
-                        title: that.getValue('title'),
-                        via: that.getValue('twitter-'),
-                        picture: that.getValue('picture')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                instapaper: function() {
-                    var text = that.getValue('title') + ' ' + that.getValue('url');
-                    shareUrl = 'http://www.instapaper.com/text';
-                    params = {
-                        u: text
-                    };
-                    that.urlSharer(shareUrl, params, true);
-                },
-                pocket: function() {
-                    shareUrl = 'https://getpocket.com/save';
-                    params = {
-                        url: that.getValue('url'),
-                        title: that.getValue('title')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                digg: function() {
-                    shareUrl = 'http://www.digg.com/submit';
-                    params = {
-                        url: that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                stumbleupon: function() {
-                    shareUrl = 'http://www.stumbleupon.com/submit';
-                    params = {
-                        url: that.getValue('url'),
-                        title: that.getValue('title')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                flipboard: function() {
-                    shareUrl = 'https://share.flipboard.com/bookmarklet/popout';
-                    params = {
-                        v: 2,
-                        title: that.getValue('title'),
-                        url: that.getValue('url'),
-                        t: Date.now()
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                weibo: function() {
-                    shareUrl = 'http://service.weibo.com/share/share.php';
-                    params = {
-                        url: that.getValue('url'),
-                        title: that.getValue('title'),
-                        language: 'zh_cn'
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                renren: function() {
-                    shareUrl = 'http://share.renren.com/share/buttonshare';
-                    params = {
-                        link: that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                myspace: function() {
-                    shareUrl = 'https://myspace.com/post';
-                    params = {
-                        u: that.getValue('url'),
-                        t: that.getValue('title'),
-                        c: that.getValue('description')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                blogger: function() {
-                    shareUrl = 'https://www.blogger.com/blog-this.g';
-                    params = {
-                        u: that.getValue('url'),
-                        n: that.getValue('title'),
-                        t: that.getValue('description')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                baidu: function() {
-                    shareUrl = 'http://cang.baidu.com/do/add';
-                    params = {
-                        it: that.getValue('title'),
-                        iu: that.getValue('url')
-                    };
-                    that.urlSharer(shareUrl, params);
-                },
-                default: function () {}
-            };
-        return (sharers[sharer] || sharers['default'])();
-    },
-    /**
-     * @event urlSharer
-     * @param {String} shareUrl
-     * @param {Object} params
-     * @param {Boolean=} isLink - refers is the event will pop a new window or
-     * just redirect to #shareUrl
-     */
-    urlSharer: function(shareUrl, params, isLink) {
-        var p = typeof params === 'object' ? params : {},
-            keys = Object.keys(p),
-            i,
-            str = keys.length > 0 ? '?' : '';
-        for (i = 0; i < keys.length; i++) {
-            if (str !== '?') {
-                str += '&';
-            }
-            str += keys[i] + '=' + encodeURIComponent(p[keys[i]]);
-        }
-        shareUrl += str;
+       if (!sharer.isLink) {
+           var popWidth = sharer.width || 600,
+               popHeight = sharer.height || 480,
+               left = window.innerWidth / 2 - popWidth / 2 + window.screenX,
+               top = window.innerHeight / 2 - popHeight / 2 + window.screenY,
+               popParams = 'scrollbars=no, width=' + popWidth + ', height=' + popHeight + ', top=' + top + ', left=' + left,
+               newWindow = window.open(sharer.shareUrl, '', popParams);
 
-        if (!isLink) {
-            var width = 600,
-                height = 480,
-                left = window.innerWidth / 2 - width / 2 + window.screenX,
-                top = window.innerHeight / 2 - height / 2 + window.screenY,
-                popParams = 'scrollbars=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left,
-                newWindow = window.open(shareUrl, '', popParams);
-
-            // Puts focus on the newWindow
-            if (window.focus) {
-                newWindow.focus();
-            }
-        } else {
-            window.location.href = shareUrl;
-        }
-    }
+           if (window.focus) {
+               newWindow.focus();
+           }
+       } else {
+           window.location.href = sharer.shareUrl;
+       }
+   }
 };
 
 module.exports = Sharer;
