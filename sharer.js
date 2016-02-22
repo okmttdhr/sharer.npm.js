@@ -219,7 +219,7 @@ Sharer.prototype = {
                     }
                 },
                 hatenabookmark: {
-                    shareUrl: 'http://cang.baidu.com/do/add' + this.getValue('url'),
+                    shareUrl: 'http://b.hatena.ne.jp/entry/' + this.getValue('url'),
                 }
             },
             s = sharers[sharer];
